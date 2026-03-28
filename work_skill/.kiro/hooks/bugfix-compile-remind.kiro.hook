@@ -1,0 +1,12 @@
+{
+  "name": "Bug Fix Compile Reminder",
+  "description": "After agent execution completes, if the conversation involves a bug fix workflow with successful compilation, remind to proceed with version control commit and Redmine status update",
+  "version": "1.0.0",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "If the last operation was a successful remote build (ssh_build) as part of a bug fix workflow, remind the user that the next steps are: 1) Review and confirm SVN/Git commit, 2) Confirm Redmine status change to Resolved, 3) Send WeChat notification. Do NOT proceed with these steps automatically - only remind the user. If the last operation was not a build, do nothing and respond with 'No action needed.'"
+  }
+}

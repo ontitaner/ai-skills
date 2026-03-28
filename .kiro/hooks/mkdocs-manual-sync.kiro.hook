@@ -1,0 +1,12 @@
+{
+  "name": "MkDocs Manual Sync",
+  "description": "手动触发 MkDocs 导航同步与站点重建。适用于删除文档后需要更新导航的场景。",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "python mkdocs/scripts/sync_mkdocs.py"
+  }
+}
