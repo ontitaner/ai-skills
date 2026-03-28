@@ -14,7 +14,7 @@
         "MYSQL_DATABASE": "test",
         "MYSQL_SSL": "DISABLED"
       },
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "execute_sql"
       ]
@@ -32,7 +32,7 @@
         "SSH_PASSWORD": "test",
         "SSH_WORK_DIR": "/home/test/test/src_452_daily"
       },
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "ssh_download",
         "ssh_deploy_file",
@@ -51,7 +51,7 @@
         "CONFLUENCE_USERNAME": "test",
         "CONFLUENCE_PASSWORD": "test"
       },
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "get_page",
         "search_pages",
@@ -68,7 +68,7 @@
         "REDMINE_URL": "https://",
         "REDMINE_API_KEY": "1234"
       },
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "list_issues",
         "get_issue",

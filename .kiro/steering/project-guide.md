@@ -12,23 +12,18 @@ inclusion: always
 
 ```
 AI_SKILLS/
-├── work_skill/                    # 工作技能模块
-│   ├── mcp_server/                # MCP Server 实现（核心代码）
-│   │   ├── mcp_mysql.py           # MySQL 查询 — Tool: execute_sql
-│   │   ├── mcp_ssh_remote.py      # SSH 远程操作 — Tools: ssh_exec, ssh_build, ssh_file_read, ssh_list_dir, ssh_download, ssh_upload_dir, ssh_deploy_file, ssh_scp_transfer
-│   │   ├── mcp_confluence_wiki.py # Confluence Wiki — Tools: get_page, create_page, update_page, search_pages, download_page_as_markdown, upload_markdown_to_page
-│   │   └── mcp_redmine.py        # Redmine 项目管理 — Tools: list_issues, get_issue, create_issue, update_issue, delete_issue, list_projects, get_project, list_versions, create_version, list_time_entries, create_time_entry, search_redmine 等
-│   └── .kiro/settings/mcp.json    # MCP Server 启动配置与环境变量
+├── .kiro/                         # Kiro 配置（工作空间级）
+│   ├── hooks/                     # Agent Hooks
+│   ├── settings/mcp.json          # MCP Server 启动配置与环境变量
+│   └── steering/                  # Steering 规则文件
+├── mcp_server/                    # MCP Server 实现（核心代码）
+│   ├── mcp_mysql.py               # MySQL 查询 — Tool: execute_sql
+│   ├── mcp_ssh_remote.py          # SSH 远程操作 — Tools: ssh_exec, ssh_build, ssh_file_read, ssh_list_dir, ssh_download, ssh_upload_dir, ssh_deploy_file, ssh_scp_transfer
+│   ├── mcp_confluence_wiki.py     # Confluence Wiki — Tools: get_page, create_page, update_page, search_pages, download_page_as_markdown, upload_markdown_to_page
+│   └── mcp_redmine.py            # Redmine 项目管理 — Tools: list_issues, get_issue, create_issue, update_issue, delete_issue, list_projects, get_project, list_versions, create_version, list_time_entries, create_time_entry, search_redmine 等
 ├── rag_skill/                     # RAG 检索增强技能模块
 │   └── rag/                       # RAG 向量知识库引擎
 ├── ai_build/                      # AI 编写的项目代码（每个项目一个子目录）
-├── mkdocs/                        # MkDocs 文档站点（所有 mkdocs 相关文件集中管理）
-│   ├── docs/                      # 文档源文件目录
-│   │   └── index.md               # 文档首页索引（自动生成）
-│   ├── site/                      # 构建产物（自动生成，勿手动修改）
-│   ├── scripts/                   # MkDocs 工具脚本
-│   │   └── sync_mkdocs.py         # 导航同步 & 构建脚本
-│   └── mkdocs.yml                 # MkDocs 配置文件
 └── AI_SKILLS.code-workspace       # VS Code / Kiro 工作空间文件
 ```
 
@@ -37,13 +32,12 @@ AI_SKILLS/
 - Python 3.10+（使用 `str | int` 等新语法）
 - MCP 框架：`mcp.server.fastmcp.FastMCP`，stdio transport
 - 依赖：`requests`（Confluence API）、`pymysql`（MySQL）、`paramiko`（SSH/SFTP）
-- 文档站点：MkDocs + Material 主题（支持 Mermaid 图表渲染）
 
 ## MCP Server 开发约定
 
-- 每个 Server 一个文件，放在 `work_skill/mcp_server/mcp_<name>.py`
+- 每个 Server 一个文件，放在 `mcp_server/mcp_<name>.py`
 - Tool 函数使用 `@mcp.tool()` 装饰器，返回值统一为 `str`（JSON 字符串）
-- 敏感配置通过环境变量传入，在 `work_skill/.kiro/settings/mcp.json` 中声明
+- 敏感配置通过环境变量传入，在 `.kiro/settings/mcp.json` 中声明
 - 入口：`if __name__ == "__main__": mcp.run(transport="stdio")`
 - 新增 Server 后需同步更新 `mcp.json` 配置
 
@@ -63,11 +57,8 @@ D:\codes\B_4.5.2_x64_daily
 
 当理解代码并生成文档时：
 
-- 默认保存路径：`mkdocs/docs/`
-- 文件命名：以进程名（可执行文件名）作为文件名，如 `mkdocs/docs/DataCollector.md`、`mkdocs/docs/AlarmService.md`
 - 格式：Markdown
 - 若同名文件已存在，更新内容而非新建
-- 文档保存后会自动触发 MkDocs 导航同步与站点重新构建（通过 Kiro Hook）
 
 ### 文档结构规范
 
@@ -97,6 +88,7 @@ D:\codes\B_4.5.2_x64_daily
      A->>B: 请求数据
      B-->>A: 返回结果
    ```
+
 8. **接口说明**（如存在网络接口/API/消息总线接口）：
    - 接口列表表格：方法、URL（含端口）、说明
    - 每个接口提供完整的请求/响应 JSON 示例，格式如下：
@@ -138,16 +130,6 @@ D:\codes\B_4.5.2_x64_daily
 - 图表中的节点名称使用中文标注，便于阅读
 - 每个文档至少包含：1 个架构图 + 1 个流程图 + 1 个时序图
 
-## MkDocs 文档站点
-
-所有 MkDocs 相关文件统一放在 `mkdocs/` 目录下：
-
-- 配置文件：`mkdocs/mkdocs.yml`
-- 文档源目录：`mkdocs/docs/`
-- 构建产物：`mkdocs/site/`（自动生成，勿手动修改）
-- 同步脚本：`mkdocs/scripts/sync_mkdocs.py` — 扫描 docs/ 自动更新导航、索引，并重新构建站点
-- 当 `mkdocs/docs/` 下的 `.md` 文件发生变动时，Kiro Hook 会自动触发 `sync_mkdocs.py` 执行重建
-
 ## ai_build 项目代码约定
 
 `ai_build/` 目录专门用于存放 AI 编写的项目代码，遵循以下规范：
@@ -161,11 +143,10 @@ D:\codes\B_4.5.2_x64_daily
 
 ## 文档检索优先级
 
-1. 本地 `mkdocs/docs/` — 项目参考文档（按进程名命名）
-2. RAG 向量知识库 — 通过 `python -m rag query "<关键词>"` 检索（在 rag_skill 目录下执行）
-3. Confluence Wiki — 通过 `confluence-wiki` MCP Server 搜索/下载
-4. MySQL — 通过 `mysql` MCP Server 查询数据或表结构
-5. 远程服务器 — 通过 `ssh-remote` MCP Server 读取文件或日志
+1. RAG 向量知识库 — 通过 `python -m rag query "<关键词>"` 检索（在 rag_skill 目录下执行）
+2. Confluence Wiki — 通过 `confluence-wiki` MCP Server 搜索/下载
+3. MySQL — 通过 `mysql` MCP Server 查询数据或表结构
+4. 远程服务器 — 通过 `ssh-remote` MCP Server 读取文件或日志
 
 ## 代码规范
 
