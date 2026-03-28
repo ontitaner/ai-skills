@@ -21,6 +21,9 @@ AI_SKILLS/
 │   ├── mcp_ssh_remote.py          # SSH 远程操作 — Tools: ssh_exec, ssh_build, ssh_file_read, ssh_list_dir, ssh_download, ssh_upload_dir, ssh_deploy_file, ssh_scp_transfer
 │   ├── mcp_confluence_wiki.py     # Confluence Wiki — Tools: get_page, create_page, update_page, search_pages, download_page_as_markdown, upload_markdown_to_page
 │   └── mcp_redmine.py            # Redmine 项目管理 — Tools: list_issues, get_issue, create_issue, update_issue, delete_issue, list_projects, get_project, list_versions, create_version, list_time_entries, create_time_entry, search_redmine 等
+├── scripts/                       # 工具脚本（AI 生成的辅助脚本统一存放）
+├── ontitaner.github.io/           # 文档站点（Next.js）
+│   └── docs/                      # 生成文档的默认存放目录
 ├── rag_skill/                     # RAG 检索增强技能模块
 │   └── rag/                       # RAG 向量知识库引擎
 ├── ai_build/                      # AI 编写的项目代码（每个项目一个子目录）
@@ -57,21 +60,31 @@ D:\codes\B_4.5.2_x64_daily
 
 当理解代码并生成文档时：
 
+- 默认保存路径：`ontitaner.github.io/docs/`
+- 文件命名：以进程名（可执行文件名）作为文件名，如 `ontitaner.github.io/docs/DataCollector.md`
 - 格式：Markdown
 - 若同名文件已存在，更新内容而非新建
+
+## 脚本存放约定
+
+AI 生成的辅助脚本（工具脚本、自动化脚本等）统一存放在工作空间根目录的 `scripts/` 下：
+
+- 默认保存路径：`scripts/`
+- 文件命名：使用 snake_case，简洁描述脚本用途，如 `scripts/sync_docs.py`
+- 禁止将脚本散落在其他目录
 
 ### 文档结构规范
 
 生成的文档必须包含以下章节（按顺序），根据实际代码内容取舍：
 
 1. **概述** — 进程用途、运行模式、一句话定位
-2. **源码路径** — 源文件目录树
-3. **架构图** — 使用 mermaid 展示模块/组件关系：
+2. **架构图** — 使用 mermaid 展示模块/组件关系：
    ```mermaid
    graph TD
      A[模块A] --> B[模块B]
      A --> C[模块C]
    ```
+3. **配置文件** — 配置项说明 + 示例
 4. **启动流程图** — 使用 mermaid flowchart 展示初始化链路：
    ```mermaid
    flowchart TD
@@ -88,7 +101,6 @@ D:\codes\B_4.5.2_x64_daily
      A->>B: 请求数据
      B-->>A: 返回结果
    ```
-
 8. **接口说明**（如存在网络接口/API/消息总线接口）：
    - 接口列表表格：方法、URL（含端口）、说明
    - 每个接口提供完整的请求/响应 JSON 示例，格式如下：
@@ -119,8 +131,6 @@ D:\codes\B_4.5.2_x64_daily
 9. **数据结构** — 关键 struct/class 的字段说明，二进制格式用图示
 10. **文件输出** — 输出文件路径、格式、命名规则
 11. **外部依赖** — 依赖库表格
-12. **配置文件** — 配置项说明 + 示例
-13. **性能参数** — 关键性能指标和限制
 
 ### Mermaid 图表要求
 
@@ -143,7 +153,7 @@ D:\codes\B_4.5.2_x64_daily
 
 ## 文档检索优先级
 
-1. RAG 向量知识库 — 通过 `python -m rag query "<关键词>"` 检索（在 rag_skill 目录下执行）
+1. 本地 `ontitaner.github.io/docs/` — 项目参考文档（按进程名命名）
 2. Confluence Wiki — 通过 `confluence-wiki` MCP Server 搜索/下载
 3. MySQL — 通过 `mysql` MCP Server 查询数据或表结构
 4. 远程服务器 — 通过 `ssh-remote` MCP Server 读取文件或日志
