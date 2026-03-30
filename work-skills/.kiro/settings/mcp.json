@@ -1,0 +1,103 @@
+{
+  "mcpServers": {
+    "mysql": {
+      "command": "python",
+      "args": [
+        "-u",
+        "D:/ontitaner/ai-skills/work-skills/mcp_server/mcp_mysql.py"
+      ],
+      "env": {
+        "MYSQL_HOST": "127.0.0.1",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USER": "test",
+        "MYSQL_PASSWORD": "test",
+        "MYSQL_DATABASE": "test",
+        "MYSQL_SSL": "DISABLED"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "execute_sql"
+      ]
+    },
+    "ssh-remote": {
+      "command": "python",
+      "args": [
+        "-u",
+        "D:/ontitaner/ai-skills/work-skills/mcp_server/mcp_ssh_remote.py"
+      ],
+      "env": {
+        "SSH_HOST": "127.0.0.1",
+        "SSH_PORT": "22",
+        "SSH_USER": "test",
+        "SSH_PASSWORD": "test",
+        "SSH_WORK_DIR": "/home/test/test/src_452_daily"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "ssh_download",
+        "ssh_deploy_file",
+        "ssh_build",
+        "ssh_exec"
+      ]
+    },
+    "confluence-wiki": {
+      "command": "python",
+      "args": [
+        "-u",
+        "D:/ontitaner/ai-skills/work-skills/mcp_server/mcp_confluence_wiki.py"
+      ],
+      "env": {
+        "CONFLUENCE_URL": "https://",
+        "CONFLUENCE_USERNAME": "test",
+        "CONFLUENCE_PASSWORD": "test"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "get_page",
+        "search_pages",
+        "download_page_as_markdown"
+      ]
+    },
+    "redmine": {
+      "command": "python",
+      "args": [
+        "-u",
+        "D:/ontitaner/ai-skills/work-skills/mcp_server/mcp_redmine.py"
+      ],
+      "env": {
+        "REDMINE_URL": "https://",
+        "REDMINE_API_KEY": "1234"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "list_issues",
+        "get_issue",
+        "list_projects",
+        "get_project",
+        "get_current_user",
+        "list_trackers",
+        "list_issue_statuses",
+        "list_issue_priorities",
+        "search_redmine",
+        "list_versions"
+      ]
+    },
+    "skill-loader": {
+      "command": "python",
+      "args": [
+        "-u",
+        "D:/ontitaner/ai-skills/work-skills/mcp_server/mcp_skill_loader.py"
+      ],
+      "env": {
+        "SKILLS_DIR": "D:/ontitaner/ai-skills/work-skills/skills"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "list_skills",
+        "match_skill",
+        "get_skill",
+        "get_workflow"
+      ]
+    }
+  }
+}
